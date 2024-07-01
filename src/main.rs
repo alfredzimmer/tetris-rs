@@ -91,9 +91,11 @@ impl TetrisGame {
     }
 
     fn spawn_piece(&mut self) {
-        self.current_piece = Self::generate_piece();
-        if self.piece_collides() {
-            self.game_over = true;
+        if !self.game_over {
+            self.current_piece = Self::generate_piece();
+            if self.piece_collides() {
+                self.game_over = true;
+            }
         }
     }
 
