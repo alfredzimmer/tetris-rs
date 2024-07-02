@@ -2,32 +2,21 @@ use std::time::{Duration, Instant};
 
 use eframe::egui;
 use rand::Rng;
+use egui::Color32;
 
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 20;
 const BLOCK_SIZE: f32 = 23.0;
 
-#[derive(Clone, Copy, PartialEq)]
-enum BlockColor {
-    Empty,
-    Cyan,
-    Blue,
-    Orange,
-    Yellow,
-    Green,
-    Purple,
-    Red,
-}
-
 struct Tetromino {
     shape: Vec<Vec<bool>>,
-    color: BlockColor,
+    color: Color32,
     x: usize,
     y: usize,
 }
 
 struct TetrisGame {
-    board: Vec<Vec<BlockColor>>,
+    board: Vec<Vec<Color32>>,
     current_piece: Tetromino,
     game_over: bool,
     score: u32,
@@ -38,7 +27,7 @@ struct TetrisGame {
 impl TetrisGame {
     fn new() -> Self {
         let mut game = TetrisGame {
-            board: vec![vec![BlockColor::Empty; BOARD_WIDTH]; BOARD_HEIGHT],
+            board: vec![vec![Color32::TRANSPARENT; BOARD_WIDTH]; BOARD_HEIGHT],
             current_piece: Self::generate_piece(),
             game_over: false,
             score: 0,
@@ -56,28 +45,28 @@ impl TetrisGame {
                     vec![true, true, true, true],
                     vec![false, false, false, false],
                 ],
-                BlockColor::Cyan,
+                Color32::KHAKI
             ),
             (
                 vec![vec![true, false, false], vec![true, true, true]],
-                BlockColor::Blue,
+                Color32::BLUE
             ),
             (
                 vec![vec![false, false, true], vec![true, true, true]],
-                BlockColor::Orange,
+                Color32::GOLD
             ),
-            (vec![vec![true, true], vec![true, true]], BlockColor::Yellow),
+            (vec![vec![true, true], vec![true, true]], Color32::YELLOW),
             (
                 vec![vec![false, true, true], vec![true, true, false]],
-                BlockColor::Green,
+                Color32::GREEN
             ),
             (
                 vec![vec![false, true, false], vec![true, true, true]],
-                BlockColor::Purple,
+                Color32::BROWN
             ),
             (
                 vec![vec![true, true, false], vec![false, true, true]],
-                BlockColor::Red,
+                Color32::RED,
             ),
         ];
 
@@ -107,7 +96,7 @@ impl TetrisGame {
                     let board_y = self.current_piece.y + dy;
                     if board_x >= BOARD_WIDTH
                         || board_y >= BOARD_HEIGHT
-                        || self.board[board_y][board_x] != BlockColor::Empty
+                        || self.board[board_y][board_x] != Color32::TRANSPARENT
                     {
                         return true;
                     }
@@ -161,14 +150,14 @@ impl TetrisGame {
     fn clear_lines(&mut self) {
         let mut lines_cleared = 0;
         self.board.retain(|row| {
-            let full = row.iter().all(|&cell| cell != BlockColor::Empty);
+            let full = row.iter().all(|&cell| cell != Color32::TRANSPARENT);
             if full {
                 lines_cleared += 1;
             }
             !full
         });
         for _ in 0..lines_cleared {
-            self.board.insert(0, vec![BlockColor::Empty; BOARD_WIDTH]);
+            self.board.insert(0, vec![Color32::TRANSPARENT; BOARD_WIDTH]);
         }
         self.score += lines_cleared * 100;
     }
@@ -230,7 +219,7 @@ impl eframe::App for TetrisGame {
             // The board
             for (y, row) in self.board.iter().enumerate() {
                 for (x, &cell) in row.iter().enumerate() {
-                    if cell != BlockColor::Empty {
+                    if cell != Color32::TRANSPARENT {
                         painter.rect_filled(
                             egui::Rect::from_min_size(
                                 response.rect.min
@@ -238,16 +227,17 @@ impl eframe::App for TetrisGame {
                                 egui::Vec2::splat(BLOCK_SIZE),
                             ),
                             0.0,
-                            match cell {
-                                BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
-                                BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
-                                BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
-                                BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
-                                BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
-                                BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
-                                BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
-                                BlockColor::Empty => unreachable!(),
-                            },
+                            cell,
+                            // match cell {
+                            //     BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
+                            //     BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
+                            //     BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
+                            //     BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
+                            //     BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
+                            //     BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
+                            //     BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
+                            //     Color32::TRANSPARENT => unreachable!(),
+                            // },
                         );
                     }
                 }
@@ -266,16 +256,17 @@ impl eframe::App for TetrisGame {
                                 egui::Vec2::splat(BLOCK_SIZE),
                             ),
                             0.0,
-                            match self.current_piece.color {
-                                BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
-                                BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
-                                BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
-                                BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
-                                BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
-                                BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
-                                BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
-                                BlockColor::Empty => unreachable!(),
-                            },
+                            self.current_piece.color,
+                            // match self.current_piece.color {
+                            //     BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
+                            //     BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
+                            //     BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
+                            //     BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
+                            //     BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
+                            //     BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
+                            //     BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
+                            //     Color32::TRANSPARENT => unreachable!(),
+                            // },
                         );
                     }
                 }
