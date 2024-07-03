@@ -44,33 +44,53 @@ impl TetrisGame {
                 vec![
                     vec![true, true, true, true],
                     vec![false, false, false, false],
-                ],
-                Color32::KHAKI
+                ]
             ),
             (
-                vec![vec![true, false, false], vec![true, true, true]],
-                Color32::BLUE
+                vec![vec![true, false, false], vec![true, true, true]]
             ),
             (
-                vec![vec![false, false, true], vec![true, true, true]],
-                Color32::GOLD
-            ),
-            (vec![vec![true, true], vec![true, true]], Color32::YELLOW),
-            (
-                vec![vec![false, true, true], vec![true, true, false]],
-                Color32::GREEN
+                vec![vec![false, false, true], vec![true, true, true]]
             ),
             (
-                vec![vec![false, true, false], vec![true, true, true]],
-                Color32::BROWN
+                vec![vec![true, true], vec![true, true]]
             ),
             (
-                vec![vec![true, true, false], vec![false, true, true]],
-                Color32::RED,
+                vec![vec![false, true, true], vec![true, true, false]]
+            ),
+            (
+                vec![vec![false, true, false], vec![true, true, true]]
+            ),
+            (
+                vec![vec![true, true, false], vec![false, true, true]]
             ),
         ];
 
-        let (shape, color) = shapes[rand::thread_rng().gen_range(0..shapes.len())].clone();
+        let colors = vec![
+            Color32::from_rgb(255, 0, 0),
+            Color32::from_rgb(0, 255, 0),
+            Color32::from_rgb(0, 0, 255),
+            Color32::from_rgb(255, 255, 0),
+            Color32::from_rgb(0, 255, 255),
+            Color32::from_rgb(255, 0, 255),
+            Color32::from_rgb(192, 192, 192),
+            Color32::from_rgb(128, 128, 128),
+            Color32::from_rgb(128, 0, 0),
+            Color32::from_rgb(128, 128, 0),
+            Color32::from_rgb(0, 128, 0),
+            Color32::from_rgb(128, 0, 128),
+            Color32::from_rgb(0, 128, 128),
+            Color32::from_rgb(0, 0, 128),
+            Color32::from_rgb(255, 165, 0),
+            Color32::from_rgb(255, 192, 203),
+            Color32::from_rgb(75, 0, 130),
+            Color32::from_rgb(139, 69, 19),
+            Color32::from_rgb(255, 20, 147),
+            Color32::from_rgb(47, 79, 79),
+        ];
+
+        let shape = shapes[rand::thread_rng().gen_range(0..shapes.len())].clone();
+        let color = colors[rand::thread_rng().gen_range(0..colors.len())].clone();
         Tetromino {
             shape,
             color,
@@ -228,16 +248,6 @@ impl eframe::App for TetrisGame {
                             ),
                             0.0,
                             cell,
-                            // match cell {
-                            //     BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
-                            //     BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
-                            //     BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
-                            //     BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
-                            //     BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
-                            //     BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
-                            //     BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
-                            //     Color32::TRANSPARENT => unreachable!(),
-                            // },
                         );
                     }
                 }
@@ -257,16 +267,6 @@ impl eframe::App for TetrisGame {
                             ),
                             0.0,
                             self.current_piece.color,
-                            // match self.current_piece.color {
-                            //     BlockColor::Cyan => egui::Color32::from_rgb(0, 255, 255),
-                            //     BlockColor::Blue => egui::Color32::from_rgb(0, 0, 255),
-                            //     BlockColor::Orange => egui::Color32::from_rgb(255, 165, 0),
-                            //     BlockColor::Yellow => egui::Color32::from_rgb(255, 255, 0),
-                            //     BlockColor::Green => egui::Color32::from_rgb(0, 255, 0),
-                            //     BlockColor::Purple => egui::Color32::from_rgb(128, 0, 128),
-                            //     BlockColor::Red => egui::Color32::from_rgb(255, 0, 0),
-                            //     Color32::TRANSPARENT => unreachable!(),
-                            // },
                         );
                     }
                 }
