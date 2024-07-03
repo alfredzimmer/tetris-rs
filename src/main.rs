@@ -1,8 +1,8 @@
 use std::time::{Duration, Instant};
 
 use eframe::egui;
-use rand::Rng;
 use egui::Color32;
+use rand::Rng;
 
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 20;
@@ -40,30 +40,16 @@ impl TetrisGame {
 
     fn generate_piece() -> Tetromino {
         let shapes = vec![
-            (
-                vec![
-                    vec![true, true, true, true],
-                    vec![false, false, false, false],
-                ]
-            ),
-            (
-                vec![vec![true, false, false], vec![true, true, true]]
-            ),
-            (
-                vec![vec![false, false, true], vec![true, true, true]]
-            ),
-            (
-                vec![vec![true, true], vec![true, true]]
-            ),
-            (
-                vec![vec![false, true, true], vec![true, true, false]]
-            ),
-            (
-                vec![vec![false, true, false], vec![true, true, true]]
-            ),
-            (
-                vec![vec![true, true, false], vec![false, true, true]]
-            ),
+            (vec![
+                vec![true, true, true, true],
+                vec![false, false, false, false],
+            ]),
+            (vec![vec![true, false, false], vec![true, true, true]]),
+            (vec![vec![false, false, true], vec![true, true, true]]),
+            (vec![vec![true, true], vec![true, true]]),
+            (vec![vec![false, true, true], vec![true, true, false]]),
+            (vec![vec![false, true, false], vec![true, true, true]]),
+            (vec![vec![true, true, false], vec![false, true, true]]),
         ];
 
         let colors = vec![
@@ -177,7 +163,8 @@ impl TetrisGame {
             !full
         });
         for _ in 0..lines_cleared {
-            self.board.insert(0, vec![Color32::TRANSPARENT; BOARD_WIDTH]);
+            self.board
+                .insert(0, vec![Color32::TRANSPARENT; BOARD_WIDTH]);
         }
         self.score += lines_cleared * 100;
     }
